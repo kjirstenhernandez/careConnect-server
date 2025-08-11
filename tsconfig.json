@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "rootDir": ".",
+    "outDir": "./dist",
+    "moduleResolution": "node",
+    "types": ["node", "express"],
+    "typeRoots": ["node_modules/@types"],
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "controllers/**/*.ts",
+    "middleware/**/*.ts",
+    "prisma/**/*.ts",
+    "routes/**/*.ts",
+    "services/**/*.ts"
+  ],
+  "exclude": ["dist", "node_modules"]
+}
