@@ -13,11 +13,6 @@ app.use('/api', router);
 
 app.use(express.static(path.join(__dirname, '../dist')));
 
-// Catch-all to serve index.html for SPA routes
-app.get(/^\/(?!api).*/, (_, res) => {
-  res.sendFile(path.join(__dirname, '../dist', 'index.html'));
-});
-
 // Choose your port
 const PORT = process.env.PORT || 3000;
 
