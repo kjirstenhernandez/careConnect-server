@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getMultipleProvidersByIDs = exports.addProviderLocation = exports.getProviderLocations = exports.addProvider = exports.getAllProviders = exports.getProviderById = void 0;
+exports.deleteProvider = exports.deleteProviderLocation = exports.updateProvider = exports.getMultipleProvidersByIDs = exports.addProviderLocation = exports.getProviderLocations = exports.addProvider = exports.getAllProviders = exports.getProviderById = void 0;
 const client_1 = __importDefault(require("../prisma/client"));
 const providerService_1 = require("../services/providerService");
 const getProviderById = async (req, res) => {
@@ -24,13 +24,14 @@ const getProviderById = async (req, res) => {
 exports.getProviderById = getProviderById;
 const getAllProviders = async (req, res) => {
     try {
-        const providers = await client_1.default.providers.findMany();
-        if (providers == null) {
-            return res.status(400).json({ message: 'No Providers' });
+        let providers = await client_1.default.providers.findMany();
+        if (!providers || providers.length === 0) {
+            return res.status(200).json({ providers: [] });
         }
         return res.status(200).json({ providers });
     }
     catch (error) {
+        console.error('Error fetching providers:', error);
         return res.status(500).json({ message: 'Unable to get providers' });
     }
 };
@@ -150,20 +151,61 @@ const getMultipleProvidersByIDs = async (req, res) => {
     }
 };
 exports.getMultipleProvidersByIDs = getMultipleProvidersByIDs;
-// export const deleteProviderLocation = async (req: Request, res: Response) => {
-//   try {
-//     const { providerId, location } = req.body;
-//     const provider = await findProviderById(providerId);
-//     if (!provider) {
-//       return res.status(404).json({ message: 'Provider Not Found'})
-//     }
-//     const updatedProvider = await prisma.providers.update({
-//       where: {
-//         id: providerId,
-//       },
-//       data: {
-//         locations: {
-//         }
-//       }
-//     })
-//   }
+const updateProvider = async (req, res) => {
+    const { providerId } = req.params;
+    const { firstName, lastName, credentials, specialty, locations, phone, fax } = req.body;
+    try {
+        const updatedProvider = await client_1.default.providers.update({
+            where: { id: providerId },
+            data: { firstName, lastName, credentials, specialty, locations, phone, fax },
+        });
+        return res.status(200).json({ message: 'Provider updated', updatedProvider });
+    }
+    catch (error) {
+        res.status(500).json({
+            message: 'Server error',
+            error: error instanceof Error ? error.message : String(error),
+        });
+    }
+};
+exports.updateProvider = updateProvider;
+const deleteProviderLocation = async (req, res) => {
+    try {
+        const { providerId, location } = req.body;
+        const provider = await (0, providerService_1.findProviderById)(providerId);
+        if (!provider) {
+            return res.status(404).json({ message: 'Provider Not Found' });
+        }
+        const updatedProvider = await client_1.default.providers.update({
+            where: {
+                id: providerId,
+            },
+            data: {
+                locations: {}
+            }
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            message: 'Server error',
+            error: error instanceof Error ? error.message : String(error),
+        });
+    }
+};
+exports.deleteProviderLocation = deleteProviderLocation;
+const deleteProvider = async (req, res) => {
+    const { providerId } = req.params;
+    try {
+        const deletedProvider = await client_1.default.providers.delete({
+            where: { id: providerId },
+        });
+        return res.status(200).json({ message: 'Provider deleted', deletedProvider });
+    }
+    catch (error) {
+        res.status(500).json({
+            message: 'Server error',
+            error: error instanceof Error ? error.message : String(error),
+        });
+    }
+};
+exports.deleteProvider = deleteProvider;

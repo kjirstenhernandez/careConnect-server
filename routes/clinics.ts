@@ -4,6 +4,8 @@ import {
   getAllClinics,
   getClinicInfoByID,
   getMultipleClinicsByIDs,
+  updateClinic,
+  deleteClinic
 } from '../controllers/clinics';
 import { validateObjectId } from '../middleware/validateObjectId';
 import { checkMongoConnection } from '../middleware/checkMongoConnection';
@@ -17,5 +19,7 @@ clinics.get(
   getClinicInfoByID
 );
 clinics.post('/find/many', checkMongoConnection, getMultipleClinicsByIDs);
-clinics.post('/new', addClinic);
+clinics.post('/create', addClinic);
 clinics.get('/find', checkMongoConnection, getAllClinics);
+clinics.put('/update/:clinicId', updateClinic);
+clinics.delete('/delete/:clinicId', validateObjectId, checkMongoConnection, deleteClinic);

@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "test:db": "ts-node scripts/test-db-connection.ts",
     "dev": "nodemon --exec ts-node index.ts --ignore 'node_modules/'",
     "build": "tsc",
     "start": "node dist/index.js",
@@ -24,8 +25,8 @@
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.3",
-    "@types/node": "^24.2.1",
+    "@types/express": "^5.0.5",
+    "@types/node": "^24.10.0",
     "nodemon": "^3.1.10",
     "prisma": "^6.12.0",
     "ts-node": "^10.9.2",

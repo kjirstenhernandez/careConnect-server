@@ -12,5 +12,8 @@ exports.providers.get('/find/:providerId', validateObjectId_1.validateObjectId, 
 exports.providers.get('/find', providers_1.getAllProviders);
 exports.providers.get('locations/:id', providers_1.getProviderLocations);
 exports.providers.post('/find/many', providers_1.getMultipleProvidersByIDs);
-exports.providers.post('/new', providers_1.addProvider);
+exports.providers.post('/create', providers_1.addProvider);
+exports.providers.put('/update/:providerId', providers_1.updateProvider);
 exports.providers.post('/addlocation', providers_1.addProviderLocation);
+exports.providers.delete('/deletelocation', providers_1.deleteProviderLocation);
+exports.providers.delete('/delete/:providerId', providers_1.deleteProvider);
